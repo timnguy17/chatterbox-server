@@ -65,5 +65,19 @@ describe('server', function() {
     });
   });
 
+  it('Should 401 when asked for cheat codes on the endpoint', function(done) {
+    request('http://127.0.0.1:3000/hrcheatcodes', function(error, response, body) {
+      expect(response.statusCode).to.equal(401);
+      done();
+    });
+  });
+
+  it('Should 418 when asked to brew coffee in a teapot', function(done) {
+    request('http://127.0.0.1:3000/coffee/tea', function(error, response, body) {
+      expect(response.statusCode).to.equal(418);
+      done();
+    });
+  });
+
 
 });

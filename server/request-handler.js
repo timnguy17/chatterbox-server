@@ -171,22 +171,24 @@ var storage = [];
 var requestHandler = function(request, response) {
   console.log('Serving request type ' + request.method + ' for url ' + request.url);
 
+
   var statusCode = 200;
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = 'application/json';
 
 
-  // if (request.method === 'OPTIONS' && request.url === '/classes/messages') {
-  //   console.log('url:', request.url); //use includes/contains?
-  //   // do some other stuff
+  if (request.method === 'OPTIONS' && request.url === '/classes/messages') {
+    console.log('url:', request.url);
+    response.writeHead(statusCode, headers);
+    response.end('test');
 
-  // }
-
-  if (request.method === 'GET' && request.url === '/classes/messages') {
-    console.log('url:', request.url); //use includes/contains?
+  } else if (request.method === 'GET' && request.url === '/classes/messages') {
+    console.log('url:', request.url);
     response.writeHead(statusCode, headers);
     response.end(JSON.stringify(storage));
+
   } else if (request.method === 'POST' && request.url === '/classes/messages') {
+    statusCode = 201;
     console.log('url:', request.url);
     let body = [];
     request.on('data', (chunk) => {
@@ -200,7 +202,15 @@ var requestHandler = function(request, response) {
       response.writeHead(statusCode, headers);
       response.end(body);
     });
-
+  } else if (request.method === 'GET' && request.url === '/hrcheatcodes') {
+    statusCode = 401;
+    response.writeHead(statusCode, headers);
+    console.log(request.url, 'url', statusCode, 'should be 401');
+    response.end('Sorry, Hack Reactor does not allow cheat codes... Goodbye');
+  } else if (request.method === 'GET' && request.url === '/coffee/tea') {
+    statusCode = 418;
+    response.writeHead(statusCode, headers);
+    response.end('Bruh, what are you even doing?');
   } else {
     statusCode = 404;
     response.writeHead(statusCode, headers);
